@@ -128,8 +128,10 @@ export default function HistoryPage() {
                     <div className="hist-options-review">
                       {item.options.map((opt, oi) => {
                         const optNorm = opt.toLowerCase().trim();
-                        const isCorrect = optNorm === item.correct_answer.toLowerCase().trim();
-                        const isUser = item.user_answer && optNorm === item.user_answer.toLowerCase().trim();
+                        const correctNorm = (item.correct_answer || '').toLowerCase().trim();
+                        const userNorm = (item.user_answer || '').toLowerCase().trim();
+                        const isCorrect = optNorm === correctNorm;
+                        const isUser = userNorm && optNorm === userNorm;
                         let cls = 'hist-opt';
                         if (isCorrect) cls += ' hist-opt-correct';
                         else if (isUser && !isCorrect) cls += ' hist-opt-wrong';
@@ -138,6 +140,7 @@ export default function HistoryPage() {
                             {opt}
                             {isCorrect && <span className="hist-opt-tag">✓ Correct</span>}
                             {isUser && !isCorrect && <span className="hist-opt-tag">Your answer</span>}
+                            {isUser && isCorrect && <span className="hist-opt-tag">✓ Your answer</span>}
                           </div>
                         );
                       })}
